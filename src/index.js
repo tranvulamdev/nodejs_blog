@@ -9,9 +9,13 @@ const port = process.env.PORT || 5000
 const route = require('./routes')
 
 // template engine
-app.engine('hbs', handlebars({  // đổi đuôi file handlebars thành hbs
-  extname: '.hbs'
-}));
+app.engine(
+    'hbs',
+    handlebars({
+        // đổi đuôi file handlebars thành hbs
+        extname: '.hbs',
+    }),
+)
 app.set('view engine', 'hbs')
 app.set('views', path.join(__dirname, 'resources/views')) //layoutsDir
 
@@ -22,13 +26,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 
-
 // HTTP logger hiện chi tiết các request trong terminal
 app.use(morgan('combined'))
 
 // routes initial
-route(app);
+route(app)
 
 app.listen(port, () => {
-  console.log(`My app listening at http://localhost:${port}`)
+    console.log(`My app listening at http://localhost:${port}`)
 })
