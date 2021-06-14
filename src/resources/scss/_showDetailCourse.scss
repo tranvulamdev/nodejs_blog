@@ -1,0 +1,25 @@
+.card-detail {
+    &-flex {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        box-shadow: 0 0 2px #a7a7a7;
+        border-radius: 12px;
+    }
+    &-btn {
+        width: 50%;
+    }
+}
+
+@include MediaQuery(992) {
+    .card-detail {
+        flex-direction: column-reverse;
+        &-info {
+            margin-top: 15px;
+        }
+        &-btn {
+            width: 100%;
+        }
+    }
+}

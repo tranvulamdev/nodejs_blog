@@ -1,0 +1,18 @@
+<div class="mt-4">
+    <div class="row card-detail">
+        {{#with course}}
+        <div class="col-lg-9 card-detail-info">
+            <h1 class="course-detail-name">{{name}}</h1>
+            <p class="course-detail-description">{{description}}</p>
+        </div>
+        <div class="col-lg-3 card-detail-flex">
+            <iframe src="https://www.youtube.com/embed/{{videoId}}" title="YouTube video player" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+            </iframe>
+            <h3 class="text-center mt-4 mb-4">Miễn Phí</h3>
+            <a href="" class="btn btn-lg btn-primary card-detail-btn">Học ngay</a>
+        </div>
+        {{/with}}
+    </div>
+</div>

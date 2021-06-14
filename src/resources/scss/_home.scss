@@ -1,0 +1,59 @@
+.card-course-item {
+    position: relative;
+    margin-top: 16px;
+    box-shadow: inset 0 0 1px #a7a7a7;
+    border-radius: 12px;
+    overflow: hidden;
+    &:hover .card-img-modify {
+        transform: scale(1.1);
+    }
+    .card-img {
+        overflow: hidden;
+        &-modify {
+            width: 100%;
+            height: 175px;
+            object-fit: cover;
+            border-radius: 0;
+            transition: all 0.3s ease-in-out;
+        }
+    }
+
+    .card-course-title {
+        text-decoration: none;
+        color: #000;
+    }
+    .card-text {
+        color: #666;
+    }
+    .btn-modify {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+    }
+}
+
+@include MediaQuery(1201) {
+    .card-course-item {
+        height: 400px;
+    }
+}
+@include MediaQuery(1200) {
+    .card-course-item {
+        height: 420px;
+    }
+}
+@include MediaQuery(992) {
+    .card-course-item {
+        height: 400px;
+    }
+}
+@include MediaQuery(768) {
+    .card-course-item {
+        height: 440px;
+    }
+}
+@include MediaQuery(576) {
+    .card-course-item {
+        height: 400px;
+    }
+}

@@ -1,0 +1,12 @@
+body {
+    overflow-y: overlay;
+}
+::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: rgba(128, 128, 128, 0.6);
+    border-radius: 12px;
+    opacity: 0.1;
+}
