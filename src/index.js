@@ -2,6 +2,7 @@ const express = require('express')
 const morgan = require('morgan')
 const handlebars = require('express-handlebars')
 const path = require('path')
+const methodOverride = require('method-override')
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -36,6 +37,9 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.set('view engine', 'hbs')
 app.set('views', path.join(__dirname, 'resources', 'views')) //layoutsDir
+
+// middleware methodOverride dùng cho form (html) cập nhật course chỉ support method get/post nên dùng nó để có thể dùng các method khác
+app.use(methodOverride('_method'))
 
 // routes initial
 route(app)
