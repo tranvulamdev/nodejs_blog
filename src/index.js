@@ -4,6 +4,9 @@ const handlebars = require('express-handlebars')
 const path = require('path')
 const methodOverride = require('method-override')
 
+// my SortMiddleware
+const SortMiddleware = require('./app/middleware/SortMiddleware')
+
 const app = express()
 const port = process.env.PORT || 5000
 
@@ -21,7 +24,30 @@ app.engine(
     handlebars({
         // đổi đuôi file handlebars thành hbs
         extname: '.hbs',
-        helpers: { sum: (a, b) => a + b },
+        helpers: {
+            sum: (a, b) => a + b,
+            sortTable: (field, sort) => {
+                const sortType = field === sort.column ? sort.type : 'default'
+
+                const icons = {
+                    default: 'oi oi-elevator',
+                    asc: 'oi oi-sort-ascending',
+                    desc: 'oi oi-sort-descending',
+                }
+
+                const types = {
+                    default: 'desc',
+                    asc: 'desc',
+                    desc: 'asc',
+                }
+
+                const icon = icons[sortType]
+                const type = types[sortType]
+
+                return `<a href="me/stored/courses?_sort&column=${field}&type=${type}"><span class="${icon}"></span></a>`
+            },
+        },
+        // các function hổ trợ làm việc (phép toán) với file hbs, trong file không quy định làm dc
     }),
 )
 
@@ -40,6 +66,9 @@ app.set('views', path.join(__dirname, 'resources', 'views')) //layoutsDir
 
 // middleware methodOverride dùng cho form (html) cập nhật course chỉ support method get/post nên dùng nó để có thể dùng các method khác
 app.use(methodOverride('_method'))
+
+// Custom middlewares (middleware tự tạo ra)
+app.use(SortMiddleware)
 
 // routes initial
 route(app)
