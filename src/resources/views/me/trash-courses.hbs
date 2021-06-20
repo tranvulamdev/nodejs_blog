@@ -1,8 +1,7 @@
-<form class="mt-4" name="container-form" method="POST" action="/courses/handle-form-actions">
-    <h3>Khóa học của tôi</h3>
-    <div style="display:flex; justify-content:space-between;">
-        <a href="/me/trash/courses" class="text-decoration-none">Thùng rác ({{deletedCount}})</a>
-        <a href="/courses/create" class="text-decoration-none">Đăng khóa học</a>
+<form class="mt-4" name="container-form" method="POST" action="/courses/handle-form-actions?_method=PATCH">
+    <div>
+        <a href="/me/stored/courses" class="text-decoration-none">Danh sách khóa học</a>
+        <h3>Khóa học đã xóa</h3>
     </div>
     <div class="mt-4 d-flex align-items-center">
         <div class="form-check me-2">
@@ -13,17 +12,17 @@
         </div>
         <select class="form-select form-select-sm checkbox-select-all-options" name="action" required>
             <option value="" selected>-- Hành động --</option>
-            <option value="delete">Xóa</option>
+            <option value="restore">Khôi phục</option>
         </select>
         <button class="btn btn-primary btn-sm ms-2 check-all-submit-btn" disabled>Thực hiện</button>
     </div>
-    <table class="table mt-2">
+    <table class="table mt-4">
         <thead>
             <tr>
                 <th scope="col" colspan="2">#</th>
                 <th scope="col">Tên khóa học</th>
                 <th scope="col">Trình độ</th>
-                <th scope="col" colspan="2">Thời gian tạo</th>
+                <th scope="col" colspan="2">Thời gian xóa</th>
             </tr>
         </thead>
         <tbody>
@@ -37,18 +36,22 @@
                 <th scope="row">{{sum @index 1}}</th>
                 <td>{{this.name}}</td>
                 <td>{{this.level}}</td>
-                <td>{{this.createdAt}}</td>
+                <td>{{this.deletedAt}}</td>
                 <td>
-                    <a href="/courses/{{this._id}}/edit" class="btn btn-link text-decoration-none">Sửa</a>
+                    <a href="" class="btn btn-link btn-restore text-decoration-none" data-bs-id="{{this._id}}">
+                        Khôi phục
+                    </a>
                     <a href="" class="btn btn-link text-decoration-none" data-bs-id="{{this._id}}"
-                        data-bs-toggle="modal" data-bs-target="#delete-course-modal" style="color: red">Xóa</a>
+                        data-bs-toggle="modal" data-bs-target="#delete-course-modal" style="color: red">
+                        Xóa vĩnh viễn
+                    </a>
                 </td>
             </tr>
             {{else}}
             <tr>
                 <td colspan="5" class="text-center">
-                    Bạn chưa đăng khóa học nào.
-                    <a class="text-decoration-none" href="courses/create">Đăng khóa học ngay</a>
+                    Thùng rác trống.
+                    <a href="/me/stored/courses" class="text-decoration-none">Xem danh sách khóa học</a>
                 </td>
             </tr>
             {{/each}}
@@ -65,11 +68,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Bạn chắc chắn muốn xóa khóa học này?</p>
+                <p>Hành động này không thể khôi phục. Bạn vẫn muốn xóa khóa học này?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button id="btn-delete-course" type="button" class="btn btn-danger">Xóa bỏ</button>
+                <button id="btn-delete-course" type="button" class="btn btn-danger">Xóa vĩnh viễn</button>
             </div>
         </div>
     </div>
@@ -77,15 +80,17 @@
 
 {{!-- Delete Hidden Form --}}
 <form name="delete-course-form" method="POST"></form>
+<form name="restore-course-form" method="POST"></form>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var courseId;
-        var deleteForm = document.forms['delete-course-form']
-        // var containerForm = document.forms['container-form']
+        var deleteForm = document.forms["delete-course-form"]
+        var restoreForm = document.forms["restore-course-form"]
         var containerForm = $('form[name="container-form"]')
         var btnDeleteCourse = document.getElementById('btn-delete-course')
         var deleteCourseModal = document.getElementById('delete-course-modal')
+        var restoreBtn = $('.btn-restore')
         var checkboxAll = $('#checkbox-all')
         var courseItemCheckbox = $('input[name="courseIds[]"]')
         var checkAllSubmitBtn = $('.check-all-submit-btn')
@@ -96,20 +101,28 @@
             courseId = button.getAttribute('data-bs-id')
         })
 
-        // when delete course btn clicked
+        // when force delete course btn clicked
         btnDeleteCourse.onclick = () => {
-            deleteForm.action = '/courses/' + courseId + '?_method=DELETE'
+            deleteForm.action = '/courses/' + courseId + '/force?_method=DELETE'
             deleteForm.submit()
         }
 
-        // Checkbox All changed
+        // restore btn clicked
+        restoreBtn.click(function (e) { // không dùng đc arrow function?
+            e.preventDefault()
+            courseId = $(this).data('bs-id')
+            restoreForm.action = '/courses/' + courseId + '/restore?_method=PATCH'
+            restoreForm.submit()
+        })
+
+        // checkbox all changed
         checkboxAll.change(function () {
             var isCheckedAll = $(this).prop('checked')
             courseItemCheckbox.prop('checked', isCheckedAll)
             renderCheckAllSubmitBtn()
         })
 
-        // Course Item Checkbox changed
+        // course item checkbox changed
         courseItemCheckbox.change(function () {
             var isCheckedAll = courseItemCheckbox.length === $('input[name="courseIds[]"]:checked').length
             checkboxAll.prop('checked', isCheckedAll)
@@ -124,5 +137,6 @@
             else
                 checkAllSubmitBtn.attr('disabled', true)
         }
+
     })
 </script>

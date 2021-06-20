@@ -28,7 +28,7 @@ app.engine(
 // HTTP logger hiện chi tiết các request trong terminal
 app.use(morgan('combined'))
 
-//middleware 2 cái dưới hỗ trợ ghi dữ liệu form data query
+//middleware 2 cái dưới hỗ trợ ghi dữ liệu submit form data query => lưu vào req.body
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
 

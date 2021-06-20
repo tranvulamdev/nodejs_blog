@@ -2,11 +2,14 @@ body {
     overflow-y: overlay;
 }
 ::-webkit-scrollbar {
-    width: 0.5em;
+    width: 0.4em;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: rgba(128, 128, 128, 0.6);
+    background-color: rgba(0, 0, 0, 0.5);
     border-radius: 12px;
-    opacity: 0.1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(0, 0, 0, 0.6);
 }
